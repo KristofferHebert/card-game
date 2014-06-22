@@ -57,6 +57,8 @@
     function Hand(name) {
         this.name = name;
         this.cards = [];
+        // added for data structure assignment
+        this.moves = [];
         this.totalValue = function () {
             var total = 0, i;
             for (i = 0; i < this.cards.length; i++) {
@@ -66,12 +68,15 @@
             return total;
         };
         this.drawCard = function (deck) {
-            var card, randomNumber;
+            var card, randomNumber, message;
             randomNumber = Math.floor(Math.random() * deck.cards.length);
             card = deck.cards[randomNumber];
             console.log(card);
             this.cards.push(card);
-            alert(this.name + " drew a " + card.toString() + ". It has a value of " + card.value);
+            message = this.name + " drew a " + card.toString() + ". It has a value of " + card.value;
+            alert(message);
+            this.moves.push(message);
+            console.log(this.moves)
             deck.cards.splice(randomNumber, 1);
 
         };
@@ -95,13 +100,16 @@
         hitButton = document.getElementById('hit');
 
         self.stand = function () {
-            alert('You stand on this round.');
+            var message = 'You stand on this round.';
+            player.moves.push(message);
+            alert(message);
             self.dealerStandOrHit();
         };
 
         self.hit = function (user, deck) {
             user.drawCard(deck);
             var score;
+
             score = user.totalValue();
             updateDOM(user.name, score);
             if (score > 21 || turns === 0) {
@@ -110,16 +118,18 @@
         };
 
         self.endGame = function (user, score) {
-                alert(user.name + ' busts!');
-                window.location.reload();
+            alert(user.name + ' busts!');
+            window.location.reload();
         };
 
         self.dealerStandOrHit = function () {
-            var totalValue = dealer.totalValue();
+            var message, totalValue = dealer.totalValue();
             if (totalValue <= 17) {
                 self.hit(dealer, deck);
             } else {
-               alert('Dealer Stands. Please select Stand or Hit.');
+                message = 'Dealer Stands. Please select Stand or Hit.';
+                alert(message);
+                dealer.moves.push(message);
             }
             turns--;
             updateDOM('turns', turns);
